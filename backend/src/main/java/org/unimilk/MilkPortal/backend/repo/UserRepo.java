@@ -1,8 +1,8 @@
-package org.unimilk.MilkPortal.backend.dao;
+package org.unimilk.MilkPortal.backend.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.unimilk.MilkPortal.backend.pojo.User;
+import org.unimilk.MilkPortal.backend.entity.User;
 
 import java.util.Optional;
 

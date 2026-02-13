@@ -10,15 +10,18 @@
     </parent>
     <groupId>org.unimilk</groupId>
     <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>backend</name>
+    <version>1.0.0</version>
+    <name>app</name>
     <description>backend</description>
+    <packaging>jar</packaging>
     <url/>
     <licenses>
         <license/>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <name>UniMilk</name>
+        </developer>
     </developers>
     <scm>
         <connection/>
