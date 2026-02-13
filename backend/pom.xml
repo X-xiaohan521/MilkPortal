@@ -11,8 +11,8 @@
     <groupId>org.unimilk</groupId>
     <artifactId>backend</artifactId>
     <version>1.0.0</version>
-    <name>app</name>
-    <description>backend</description>
+    <name>backend</name>
+    <description>milk-portal-backend</description>
     <packaging>jar</packaging>
     <url/>
     <licenses>

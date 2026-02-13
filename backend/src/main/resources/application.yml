@@ -1,3 +1,5 @@
+app:
+  data-dir: ${APP_DATA_DIR:./data}
 spring:
   application:
     name: backend
@@ -5,7 +7,7 @@ spring:
     compose:
       enabled: false
   datasource:
-    url: jdbc:sqlite:./backend/data/portal.db
+    url: jdbc:sqlite:${app.data-dir}/portal.db
     driver-class-name: org.sqlite.JDBC
   jpa:
     hibernate:

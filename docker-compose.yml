@@ -4,7 +4,11 @@ services:
     build: ./backend
     ports:
       - "8080:8080"
-
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      JWT_SECRET: kJUtGE1a0USnCVqY/cgefqrCkGyY+ZkO7aFP73/MzeA=
+      APP_DATA_DIR: /app/data
 #  frontend:
 #    build: ./frontend
 #    ports:
