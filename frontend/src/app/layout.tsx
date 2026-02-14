@@ -1,10 +1,11 @@
 import './globals.css'
 import { ReactNode } from 'react'
 import { Navbar } from "@/components/navbar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'UniMilk',
+  title: 'Milk Portal',
   description: 'Dashboard for personal services',
 }
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {/* Left section: Logo + Nav */}
             <div className="flex items-center space-x-6">
               {/* Logo */}
-              <a href="/"><div className="text-xl font-bold">UniMilk</div></a>
+              <Link href={"/"}><div className="text-xl font-bold">MilkPortal</div></Link>
 
               {/* Navigation Menu */}
               <Navbar />
@@ -34,8 +35,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 className="border rounded-md px-2 py-1"
               />
 
-              {/* Avatar (placeholder circle) */}
-              <a href="/login"><div className="w-8 h-8 rounded-full bg-gray-300" /></a>
+              {/* Avatar (placeholder) */}
+              <Avatar size="sm">
+                <AvatarImage src="https://github.com/shadcn.png" className="rounded-full"/>
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
             </div>
           </div>
         </div>
