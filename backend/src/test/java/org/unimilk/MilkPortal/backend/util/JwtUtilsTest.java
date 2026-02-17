@@ -20,4 +20,14 @@ class JwtUtilsTest {
         String extractedUsername = jwtUtils.extractUsername(token);
         assertEquals("Milk", extractedUsername);
     }
+
+    @Test
+    public void parseInvalidTokenShouldFail() {
+        String token = jwtUtils.generateToken("Milk");
+        System.out.println("Token: " + token);
+        token += "Q";
+        System.out.println("Modified token: " + token);
+        String finalToken = token;
+        assertThrows(Exception.class, () -> jwtUtils.extractUsername(finalToken));
+    }
 }
