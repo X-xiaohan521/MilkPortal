@@ -20,7 +20,7 @@ export function LoginCard() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form method="POST">
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>

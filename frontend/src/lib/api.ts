@@ -12,4 +12,9 @@ export async function login(username: string, password: string): Promise<LoginRe
         },
         body: new URLSearchParams({ username, password })
     })
+    return {
+        success: true,
+        token: "",
+        message: ""
+    }
 }

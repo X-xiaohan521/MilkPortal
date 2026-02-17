@@ -31,7 +31,7 @@ public class TokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         String requestURI = req.getRequestURI();
-        if (requestURI.contains("/api/auth/login")) {
+        if (isPublicPath(requestURI)) {
             filterChain.doFilter(req, resp);
             return;
         }
@@ -52,5 +52,9 @@ public class TokenFilter implements Filter {
     @Override
     public void destroy() {
         Filter.super.destroy();
+    }
+
+    private boolean isPublicPath(String path) {
+        return path.equals("/api/auth/login");
     }
 }

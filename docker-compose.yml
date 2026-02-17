@@ -9,9 +9,9 @@ services:
     environment:
       JWT_SECRET: kJUtGE1a0USnCVqY/cgefqrCkGyY+ZkO7aFP73/MzeA=
       APP_DATA_DIR: /app/data
-#  frontend:
-#    build: ./frontend
-#    ports:
-#      - "3000:3000"
-#    depends_on:
-#      - backend
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
