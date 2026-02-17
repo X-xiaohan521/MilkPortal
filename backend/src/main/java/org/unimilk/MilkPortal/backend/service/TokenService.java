@@ -17,6 +17,11 @@ public class TokenService {
         this.userRepo = userRepo;
     }
 
+    /**
+     * Verify a token.
+     * @param token the token to be verified
+     * @return the username of the token holder if the token is valid, otherwise an empty string
+     */
     public String verifyToken(String token) {
         try {
             String username = jwtUtils.extractUsername(token);
