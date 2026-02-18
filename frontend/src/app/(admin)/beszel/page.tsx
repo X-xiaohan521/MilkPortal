@@ -1,3 +1,9 @@
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: "Beszel",
+}
+
 export default function Beszel() {
     return(
         <div className="flex-1 p-4">

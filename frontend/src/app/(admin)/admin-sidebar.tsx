@@ -58,8 +58,6 @@ import {
     Sparkles,
     Trash2,
 } from "lucide-react"
-import {HomeButton} from "@/components/home-button";
-import {IconInnerShadowTop} from "@tabler/icons-react";
 
 // This is sample data.
 const data = {
@@ -411,7 +409,7 @@ export function AdminSidebar({
                             asChild
                             className="data-[slot=sidebar-menu-button]:!p-1.5"
                         >
-                            <a href="#">
+                            <a href="/">
                                 {/*<IconInnerShadowTop className="!size-5" />*/}
                                 <span className="text-base font-semibold">MilkPortal</span>
                             </a>

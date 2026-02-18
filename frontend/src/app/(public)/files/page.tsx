@@ -1,3 +1,9 @@
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: "Files"
+}
+
 export default function Files() {
     return(
         <main className="flex-1 p-4">

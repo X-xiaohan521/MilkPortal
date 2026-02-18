@@ -1,10 +1,17 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import {Button} from "@/components/ui/button"
+import {Separator} from "@/components/ui/separator"
+import {SidebarTrigger} from "@/components/ui/sidebar"
 import {RefreshRateSelector} from "@/app/(admin)/refresh-rate-selector";
 import {RotateCw} from "lucide-react";
+import {usePathname} from "next/navigation";
+
+export function useGeneratedTitle() {
+    const pathname = usePathname();
+    const path = pathname.split("/")[1];
+    return path[0].toUpperCase() + path.slice(1);
+}
 
 export function SiteHeader() {
     return (
@@ -15,7 +22,7 @@ export function SiteHeader() {
                     orientation="vertical"
                     className="mx-2 data-[orientation=vertical]:h-4"
                 />
-                <h1 className="text-base font-medium">Dashboard</h1>
+                <h1 className="text-base font-medium">{ useGeneratedTitle() }</h1>
                 <div className="ml-auto flex items-center gap-2">
                     <RefreshRateSelector />
                     <Button variant="ghost" size="icon" className="w-12">

@@ -16,18 +16,18 @@ export function LoginCard() {
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your username & password below to login
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form method="POST">
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
+                id="username"
+                type="text"
+                placeholder=""
                 required
               />
             </div>

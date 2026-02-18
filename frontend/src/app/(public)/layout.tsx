@@ -1,12 +1,16 @@
 import '../globals.css'
 import { ReactNode } from 'react'
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/app/(public)/navbar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link'
+import {Metadata} from "next";
 
-export const metadata = {
-  title: 'Milk Portal',
-  description: 'Dashboard for personal services',
+export const metadata: Metadata = {
+  title: {
+    default: "Milk Portal",
+    template: "%s | Milk Portal"
+  },
+  description: 'Dashboard for personal services.',
 }
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

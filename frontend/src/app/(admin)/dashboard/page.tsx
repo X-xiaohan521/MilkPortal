@@ -1,13 +1,13 @@
-import { ChartAreaInteractive } from "../chart-area-interactice"
-import { DataTable } from "../data-table"
-import { SectionCards } from "../section-cards"
-import { SiteHeader } from "../site-header"
-import {
-    SidebarInset,
-    SidebarProvider,
-} from "@/components/ui/sidebar"
+import { ChartAreaInteractive } from "./chart-area-interactice"
+import { DataTable } from "./data-table"
+import { SectionCards } from "./section-cards"
+import {Metadata} from "next";
 
 import data from "./data.json"
+
+export const metadata: Metadata = {
+    title: "Dashboard",
+}
 
 export default function Page() {
     return (
