@@ -1,6 +1,10 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import {RefreshRateSelector} from "@/app/(admin)/refresh-rate-selector";
+import {RotateCw} from "lucide-react";
 
 export function SiteHeader() {
     return (
@@ -13,15 +17,9 @@ export function SiteHeader() {
                 />
                 <h1 className="text-base font-medium">Dashboard</h1>
                 <div className="ml-auto flex items-center gap-2">
-                    <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-                        <a
-                            href="#"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            className="dark:text-foreground"
-                        >
-                            Export
-                        </a>
+                    <RefreshRateSelector />
+                    <Button variant="ghost" size="icon" className="w-12">
+                        <RotateCw />
                     </Button>
                 </div>
             </div>

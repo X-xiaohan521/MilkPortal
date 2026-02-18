@@ -1,11 +1,11 @@
 export default function Beszel() {
     return(
-        <main className="flex-1 p-4">
+        <div className="flex-1 p-4">
             <iframe
                 src="http://10.0.0.10:8090/"
-                className="w-full h-[80vh] rounded-lg border"
+                className="w-full h-[600] rounded-lg border"
                 title="Beszel"
             />
-        </main>
+        </div>
     )
 }

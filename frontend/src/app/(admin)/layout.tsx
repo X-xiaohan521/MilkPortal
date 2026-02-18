@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                         <AdminSidebar/>
                         <SidebarInset>
                             <SiteHeader />
-                            <div>
+                            <div className="flex flex-col">
                                 { children }
                             </div>
                         </SidebarInset>
