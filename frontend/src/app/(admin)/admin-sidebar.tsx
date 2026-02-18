@@ -59,6 +59,7 @@ import {
     Trash2,
 } from "lucide-react"
 import {HomeButton} from "@/components/home-button";
+import {IconInnerShadowTop} from "@tabler/icons-react";
 
 // This is sample data.
 const data = {
@@ -402,25 +403,30 @@ export function AdminSidebar({
                                ...props
                            }: React.ComponentProps<typeof Sidebar>) {
     return (
-        <SidebarProvider>
-            <Sidebar collapsible="icon" {...props}>
-                <SidebarHeader className="flex items-center gap-2 px-3 py-2">
-
-                    {/* Home button */}
-                    <HomeButton />
-
-                    {/* Collapse trigger */}
-                    <SidebarTrigger className="ml-auto" />
-                </SidebarHeader>
-                <SidebarContent>
-                    <NavServer projects={data.projects} />
-                    <NavMain items={data.navMain} />
-                </SidebarContent>
-                <SidebarFooter>
-                    <NavUser user={data.user} />
-                </SidebarFooter>
-                <SidebarRail />
-            </Sidebar>
-        </SidebarProvider>
+        <Sidebar collapsible="icon" {...props}>
+            <SidebarHeader className="flex gap-2 py-2">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            className="data-[slot=sidebar-menu-button]:!p-1.5"
+                        >
+                            <a href="#">
+                                {/*<IconInnerShadowTop className="!size-5" />*/}
+                                <span className="text-base font-semibold">MilkPortal</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
+            <SidebarContent>
+                <NavServer projects={data.projects} />
+                <NavMain items={data.navMain} />
+            </SidebarContent>
+            <SidebarFooter>
+                <NavUser user={data.user} />
+            </SidebarFooter>
+            <SidebarRail />
+        </Sidebar>
     )
 }
