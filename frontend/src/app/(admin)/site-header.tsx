@@ -25,7 +25,7 @@ export function SiteHeader() {
                 <h1 className="text-base font-medium">{ useGeneratedTitle() }</h1>
                 <div className="ml-auto flex items-center gap-2">
                     <RefreshRateSelector />
-                    <Button variant="ghost" size="icon" className="w-12">
+                    <Button variant="ghost" size="icon">
                         <RotateCw />
                     </Button>
                 </div>

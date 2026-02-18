@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
 import {SiteHeader} from "@/app/(admin)/site-header";
 import {Metadata} from "next";
+import {ThemeProvider} from "next-themes";
 
 export const metadata: Metadata = {
     title: {
@@ -15,19 +16,21 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body>
-                <div className="flex">
-                    <SidebarProvider>
-                        <AdminSidebar/>
-                        <SidebarInset>
-                            <SiteHeader />
-                            <div className="flex flex-col">
-                                { children }
-                            </div>
-                        </SidebarInset>
-                    </SidebarProvider>
-                </div>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                    <div className="flex">
+                        <SidebarProvider>
+                            <AdminSidebar/>
+                            <SidebarInset>
+                                <SiteHeader />
+                                <div className="flex flex-col">
+                                    { children }
+                                </div>
+                            </SidebarInset>
+                        </SidebarProvider>
+                    </div>
+                </ThemeProvider>
             </body>
         </html>
     )

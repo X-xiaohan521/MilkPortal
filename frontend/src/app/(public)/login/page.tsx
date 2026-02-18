@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function Login() {
   return (
-  <main className="bg-gray-50 ">
+  <main>
       <LoginCard />
   </main>
 )
