@@ -74,7 +74,7 @@ export function LoginForm({
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login", {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -89,6 +89,7 @@ export function LoginForm({
         setError("Server error")
       } else if (data.success) {
         // saveToken(data.token)
+        console.log(data)
       } else {
         setError(data.message);
       }
