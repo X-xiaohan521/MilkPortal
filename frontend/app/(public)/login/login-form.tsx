@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,16 +11,96 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner";
+
+import { useState } from "react";
+import {Label} from "radix-ui";
+
+type LoginResponse = {
+  success: boolean,
+  token: string,
+  message: string
+}
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [error, setError] = useState("");
+  const [logging, setLogging] = useState(false);
+
+  const validateUsername = (): void => {
+    setUsernameMessage("");
+    if (!username) {
+      setUsernameMessage("Please enter username.");
+    } else if (username.length < 3) {
+      setUsernameMessage("Username too short.");
+    } else if (!/^[a-zA-Z0-9@._-]+$/.test(username)) {
+      setUsernameMessage("Invalid characters in username.");
+    } else {
+      return;
+    }
+  }
+
+  const validatePassword = (): void => {
+    setPasswordMessage("");
+    if (!password) {
+      setPasswordMessage("Please enter password.");
+    } else if (password.length < 6) {
+      setPasswordMessage("Password must be at least 6 characters.");
+    } else if (!/^[a-zA-Z0-9@._-]+$/.test(password)) {
+      setPasswordMessage("Invalid characters in password.");
+    } else {
+      return;
+    }
+  }
+
+  const submitLogin = async () => {
+    setLogging(true);
+    setError("");
+
+    validateUsername();
+    validatePassword();
+    if (usernameMessage.length !== 0 || passwordMessage.length !== 0) {
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+      const data: LoginResponse = await res.json()
+      if (data.success) {
+        // saveToken(data.token)
+      } else {
+        setError(data.message);
+      }
+    } catch(err) {
+      setError("Network Error: " + err);
+    } finally {
+      setLogging(false);
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6 w-full max-w-2xl md:max-w-2xl lg:max-w-3xl", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            submitLogin();
+          }} className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -26,16 +108,17 @@ export function LoginForm({
                   Login to your Milk account
                 </p>
               </div>
-              <Field>
+              <Field data-invalid={usernameMessage !== ""}>
                 <FieldLabel htmlFor="username">Username</FieldLabel>
                 <Input
-                  id="username"
-                  type="text"
-                  placeholder=""
-                  required
+                  id="username" type="text" placeholder="" required
+                  aria-invalid={usernameMessage !== ""}
+                  onChange={(e) => {setUsername(e.target.value)}}
+                  onBlur={(e) => {validateUsername()}}
                 />
+                <FieldDescription>{usernameMessage}</FieldDescription>
               </Field>
-              <Field>
+              <Field data-invalid={passwordMessage !== ""}>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <a
@@ -45,10 +128,21 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required
+                       aria-invalid={passwordMessage !== ""}
+                       onChange={(e) => {setPassword(e.target.value)}}
+                       onBlur={(e) => {validatePassword()}}
+                />
+                <FieldDescription>{passwordMessage}</FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={logging}>
+                  <Spinner data-icon="inline-start" className={logging ? "" : "hidden"} />
+                  Login
+                </Button>
+              </Field>
+              <Field data-invalid={error !== ""}>
+                <a className={"text-destructive"}>{error}</a>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
@@ -96,10 +190,6 @@ export function LoginForm({
           </div>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
     </div>
   )
 }
