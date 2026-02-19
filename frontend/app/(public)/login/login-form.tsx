@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner";
 
 import { useState } from "react";
-import {Label} from "radix-ui";
 
 type LoginResponse = {
   success: boolean,
@@ -33,29 +32,35 @@ export function LoginForm({
   const [error, setError] = useState("");
   const [logging, setLogging] = useState(false);
 
-  const validateUsername = (): void => {
+  const validateUsername = (): boolean => {
     setUsernameMessage("");
     if (!username) {
       setUsernameMessage("Please enter username.");
+      return false;
     } else if (username.length < 3) {
       setUsernameMessage("Username too short.");
+      return false;
     } else if (!/^[a-zA-Z0-9@._-]+$/.test(username)) {
       setUsernameMessage("Invalid characters in username.");
+      return false;
     } else {
-      return;
+      return true;
     }
   }
 
-  const validatePassword = (): void => {
+  const validatePassword = (): boolean => {
     setPasswordMessage("");
     if (!password) {
       setPasswordMessage("Please enter password.");
+      return false;
     } else if (password.length < 6) {
       setPasswordMessage("Password must be at least 6 characters.");
+      return false;
     } else if (!/^[a-zA-Z0-9@._-]+$/.test(password)) {
       setPasswordMessage("Invalid characters in password.");
+      return false;
     } else {
-      return;
+      return true;
     }
   }
 
@@ -63,9 +68,8 @@ export function LoginForm({
     setLogging(true);
     setError("");
 
-    validateUsername();
-    validatePassword();
-    if (usernameMessage.length !== 0 || passwordMessage.length !== 0) {
+    if (!(validateUsername() && validatePassword())) {
+      setLogging(false);
       return;
     }
 
@@ -81,7 +85,9 @@ export function LoginForm({
         })
       })
       const data: LoginResponse = await res.json()
-      if (data.success) {
+      if (!res.ok) {
+        setError("Server error")
+      } else if (data.success) {
         // saveToken(data.token)
       } else {
         setError(data.message);
@@ -114,7 +120,7 @@ export function LoginForm({
                   id="username" type="text" placeholder="" required
                   aria-invalid={usernameMessage !== ""}
                   onChange={(e) => {setUsername(e.target.value)}}
-                  onBlur={(e) => {validateUsername()}}
+                  onBlur={() => {validateUsername()}}
                 />
                 <FieldDescription>{usernameMessage}</FieldDescription>
               </Field>
@@ -131,7 +137,7 @@ export function LoginForm({
                 <Input id="password" type="password" required
                        aria-invalid={passwordMessage !== ""}
                        onChange={(e) => {setPassword(e.target.value)}}
-                       onBlur={(e) => {validatePassword()}}
+                       onBlur={() => {validatePassword()}}
                 />
                 <FieldDescription>{passwordMessage}</FieldDescription>
               </Field>
@@ -142,7 +148,7 @@ export function LoginForm({
                 </Button>
               </Field>
               <Field data-invalid={error !== ""}>
-                <a className={"text-destructive"}>{error}</a>
+                <p className="text-destructive text-sm">{error}</p>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
