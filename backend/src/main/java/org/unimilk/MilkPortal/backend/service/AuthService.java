@@ -2,7 +2,10 @@ package org.unimilk.MilkPortal.backend.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.unimilk.MilkPortal.backend.dto.LoginResponse;
 import org.unimilk.MilkPortal.backend.entity.User;
@@ -14,31 +17,26 @@ import org.unimilk.MilkPortal.backend.util.JwtUtils;
 public class AuthService {
     private final UserRepo userRepo;
     private final JwtUtils jwtUtils;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthService(UserRepo userRepo, JwtUtils jwtUtils, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepo userRepo, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
         this.userRepo = userRepo;
         this.jwtUtils = jwtUtils;
-        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     public LoginResponse onLogin(String username, String password) {
-        User user = userRepo.findByUsername(username).orElse(null);
-        if (user == null) {
-            log.warn("User {} login failed: user not found.", username);
-            return new LoginResponse(false, "", "User not found.");
-        } else if (!user.getPassword().startsWith("$2a$")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepo.save(user);
-            log.warn("User {} password deprecated: updated BCrypt encoding.", username);
-            return new LoginResponse(false, "", "Password invalid, please try again.");
-        } else if (!passwordEncoder.matches(password, user.getPassword())) {
-            log.warn("User {} login failed: password incorrect.", username);
-            return new LoginResponse(false, "", "Password incorrect.");
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+            log.info("User {} login success.", username);
+            return new LoginResponse(true, jwtUtils.generateToken(authentication.getName()), "Login success.");
+        } catch (AuthenticationException e) {
+            log.warn("User {} login failed: invalid username or password.", username);
+            return new LoginResponse(false, "", "Invalid username or password.");
         }
-        log.info("User {} login success.", username);
-        return new LoginResponse(true, jwtUtils.generateToken(username), "Login success.");
     }
 
     public void onRegister(String username, String password) {
