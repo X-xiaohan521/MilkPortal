@@ -2,6 +2,7 @@ package org.unimilk.MilkPortal.backend.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.unimilk.MilkPortal.backend.dto.LoginResponse;
 import org.unimilk.MilkPortal.backend.entity.User;
@@ -13,11 +14,13 @@ import org.unimilk.MilkPortal.backend.util.JwtUtils;
 public class AuthService {
     private final UserRepo userRepo;
     private final JwtUtils jwtUtils;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthService(UserRepo userRepo, JwtUtils jwtUtils) {
+    public AuthService(UserRepo userRepo, JwtUtils jwtUtils, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.jwtUtils = jwtUtils;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public LoginResponse onLogin(String username, String password) {
@@ -25,7 +28,12 @@ public class AuthService {
         if (user == null) {
             log.warn("User {} login failed: user not found.", username);
             return new LoginResponse(false, "", "User not found.");
-        } else if (!user.getPassword().equals(password)) {
+        } else if (!user.getPassword().startsWith("$2a$")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepo.save(user);
+            log.warn("User {} password deprecated: updated BCrypt encoding.", username);
+            return new LoginResponse(false, "", "Password invalid, please try again.");
+        } else if (!passwordEncoder.matches(password, user.getPassword())) {
             log.warn("User {} login failed: password incorrect.", username);
             return new LoginResponse(false, "", "Password incorrect.");
         }
