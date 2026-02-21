@@ -17,6 +17,7 @@ LABEL authors="unimilk"
 WORKDIR /app
 
 RUN mkdir -p /app/data
+RUN mkdir -p /app/data/log
 
 COPY --from=build /build/target/*.jar app.jar
 
