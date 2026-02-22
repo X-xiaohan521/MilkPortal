@@ -25,5 +25,9 @@ export async function apiFetch(
     window.location.href = "/login";
   }
 
+  if (response.status === 403) {
+    window.location.href = "/"
+  }
+
   return response.json();
 }
