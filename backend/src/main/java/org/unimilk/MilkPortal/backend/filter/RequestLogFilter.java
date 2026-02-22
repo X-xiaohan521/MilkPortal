@@ -22,7 +22,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
         String ip = getClientIp(req);
-        log.info("Request {} {} from IP={}", req.getMethod(), req.getRequestURI(), ip);
+        log.info("Request {} {} from {}", req.getMethod(), req.getRequestURI(), ip);
         filterChain.doFilter(req, resp);
     }
 
@@ -37,11 +37,16 @@ public class RequestLogFilter extends OncePerRequestFilter {
         if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-
         if (ip != null && ip.contains(",")) {
             ip = ip.split(",")[0];
         }
+        return normalizeIp(ip);
+    }
 
+    private String normalizeIp(String ip) {
+        if ("0:0:0:0:0:0:0:1".equals(ip) || "::1".equals(ip)) {
+            return "127.0.0.1";
+        }
         return ip;
     }
 }

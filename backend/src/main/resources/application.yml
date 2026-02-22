@@ -1,5 +1,8 @@
 app:
   data-dir: ${APP_DATA_DIR:./data}
+  avatar:
+    dir: ${APP_DATA_DIR:./data}/avatar
+    uri: /uploads/avatar
 spring:
   application:
     name: backend

@@ -3,10 +3,12 @@ import { ReactNode } from 'react'
 import { Navbar } from "./navbar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link'
-import {Metadata} from "next";
-import {ThemeToggle} from "@/components/theme-toggle";
-import {ThemeProvider} from "next-themes";
-import {Input} from "@/components/ui/input";
+import { Metadata } from "next";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeProvider } from "next-themes";
+import { Input } from "@/components/ui/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { Search } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: {
@@ -36,12 +38,18 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               {/* Right section: Search + Avatar */}
               <div className="flex items-center space-x-4">
                 {/* Search (placeholder for now) */}
-                <Input type="search" placeholder="Search..." />
+                <InputGroup className="max-w-xs h-8">
+                  <InputGroupInput placeholder="Search..." />
+                  <InputGroupAddon>
+                    <Search />
+                  </InputGroupAddon>
+                  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+                </InputGroup>
                 <ThemeToggle />
                 {/* Avatar (placeholder) */}
                 <Link href={"/login"}>
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="rounded-full"/>
+                    <AvatarImage src="https://github.com/shadcn.png" className="rounded-full" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </Link>
