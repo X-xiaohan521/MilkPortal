@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation"
 
 type LoginResponse = {
   success: boolean,
@@ -31,6 +32,8 @@ export function LoginForm({
   const [passwordMessage, setPasswordMessage] = useState("");
   const [error, setError] = useState("");
   const [logging, setLogging] = useState(false);
+
+  const router = useRouter()
 
   const validateUsername = (): boolean => {
     setUsernameMessage("");
@@ -88,8 +91,9 @@ export function LoginForm({
       if (!res.ok) {
         setError("Server error")
       } else if (data.success) {
-        // saveToken(data.token)
+        localStorage.setItem("token", data.token)  // store token in localStorage
         console.log(data)
+        router.push("/")
       } else {
         setError(data.message);
       }
