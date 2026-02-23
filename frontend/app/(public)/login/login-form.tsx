@@ -92,7 +92,6 @@ export function LoginForm({
         setError("Server error")
       } else if (data.success) {
         localStorage.setItem("token", data.token)  // store token in localStorage
-        console.log(data)
         router.push("/")
       } else {
         setError(data.message);

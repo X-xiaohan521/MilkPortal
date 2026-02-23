@@ -1,18 +1,15 @@
 const BASE_URL = "http://localhost:8080";
 
-export async function apiFetch(
-  url: string,
-  options: RequestInit = {}
-) {
+export async function apiFetch(url: string, options: RequestInit = {}) {
   const token = localStorage.getItem("token");
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(options.headers || {}),
+    ...(options.headers as Record<string, string>),
   };
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers.Authorization = `Bearer ${token}`;
   }
 
   const response = await fetch(`${BASE_URL}${url}`, {
@@ -26,8 +23,12 @@ export async function apiFetch(
   }
 
   if (response.status === 403) {
-    window.location.href = "/"
+    window.location.href = "/";
   }
 
   return response.json();
+}
+
+export function getUrl(uri: string) {
+    return BASE_URL + uri
 }

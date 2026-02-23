@@ -29,30 +29,56 @@ public class TokenFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest,
+                         ServletResponse servletResponse,
+                         FilterChain filterChain)
+            throws IOException, ServletException {
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
+
+        if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+            log.info("HTTP pre-check: allowed pass.");
+            filterChain.doFilter(req, resp);
+            return;
+        }
+
         String requestURI = req.getRequestURI();
+
         if (isPublicPath(requestURI)) {
             log.info("Access public uri: allowed pass.");
             filterChain.doFilter(req, resp);
             return;
         }
-        String token = req.getHeader("token");
-        if (token == null || token.isEmpty()) {
-            log.warn("Access restricted uri without token: prohibited.");
+
+        String authHeader = req.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("Missing or invalid Authorization header: prohibited.");
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        String result = tokenService.verifyToken(token);
-        if (result.isEmpty()) {
+
+        String token = authHeader.substring(7);
+
+        if (token.isEmpty()) {
+            log.warn("Token is empty: prohibited.");
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        String username = tokenService.verifyToken(token);
+
+        if (username == null || username.isEmpty()) {
             log.warn("Token invalid: prohibited.");
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        } else {
-            log.info("User {} access restricted uri with a valid token: allowed pass.", result);
-            req.setAttribute("username", result);
-            filterChain.doFilter(req, resp);
+            return;
         }
+
+        log.info("User {} access restricted uri with a valid token: allowed pass.", username);
+        req.setAttribute("username", username);
+
+        filterChain.doFilter(req, resp);
     }
 
     @Override

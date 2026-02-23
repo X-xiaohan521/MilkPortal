@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import Link from "next/link"
 
 import {
@@ -12,6 +11,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { useUser } from "@/context/user-context"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { Search } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getUrl } from '@/lib/api'
 
 export function Navbar() {
   return (
@@ -98,5 +103,47 @@ export function Navbar() {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
+  )
+}
+
+export function TopBar() {
+  const { user, loading } = useUser()
+  return (
+    <div className="h-14">
+      <div className="container mx-auto flex h-full items-center justify-between">
+        {/* Left section: Logo + Nav */}
+        <div className="flex items-center space-x-6">
+          {/* Logo */}
+          <Link href={"/"}><div className="text-xl font-bold">MilkPortal</div></Link>
+
+          {/* Navigation Menu */}
+          <Navbar />
+        </div>
+
+        {/* Right section: Search + Avatar */}
+        <div className="flex items-center space-x-4">
+          {/* Search (placeholder for now) */}
+          <InputGroup className="max-w-xs h-8">
+            <InputGroupInput placeholder="Search..." />
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+            <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+          </InputGroup>
+          <ThemeToggle />
+          {/* Avatar (placeholder) */}
+          <Link href={"/login"}>
+            <Avatar>
+              <AvatarImage src={
+                user
+                  ? getUrl(user.avatarUri)
+                  : ""
+              } className="rounded-full" />
+              <AvatarFallback>ML</AvatarFallback>
+            </Avatar>
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }

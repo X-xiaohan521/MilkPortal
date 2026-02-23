@@ -1,14 +1,9 @@
 import '../globals.css'
 import { ReactNode } from 'react'
-import { Navbar } from "./navbar"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Link from 'next/link'
+import { TopBar } from "./navbar"
 import { Metadata } from "next";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeProvider } from "next-themes";
-import { Input } from "@/components/ui/input";
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
-import { Search } from 'lucide-react'
+import { UserProvider } from '@/context/user-context'
 
 export const metadata: Metadata = {
   title: {
@@ -21,53 +16,24 @@ export const metadata: Metadata = {
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex flex-col h-screen bg-background">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {/* top bar */}
-          <div className="h-14">
-            <div className="container mx-auto flex h-full items-center justify-between">
-              {/* Left section: Logo + Nav */}
-              <div className="flex items-center space-x-6">
-                {/* Logo */}
-                <Link href={"/"}><div className="text-xl font-bold">MilkPortal</div></Link>
+      <UserProvider>
+        <body className="flex flex-col h-screen bg-background">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {/* Top bar */}
+            <TopBar />
 
-                {/* Navigation Menu */}
-                <Navbar />
-              </div>
+            {/* main content */}
+            <main className="flex-1 flex items-center justify-center overflow-auto p-6">
+              {children}
+            </main>
 
-              {/* Right section: Search + Avatar */}
-              <div className="flex items-center space-x-4">
-                {/* Search (placeholder for now) */}
-                <InputGroup className="max-w-xs h-8">
-                  <InputGroupInput placeholder="Search..." />
-                  <InputGroupAddon>
-                    <Search />
-                  </InputGroupAddon>
-                  <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
-                </InputGroup>
-                <ThemeToggle />
-                {/* Avatar (placeholder) */}
-                <Link href={"/login"}>
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="rounded-full" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* main content */}
-          <main className="flex-1 flex items-center justify-center overflow-auto p-6">
-            {children}
-          </main>
-
-          {/*/!* footer *!/*/}
-          <footer className="h-12 flex items-center justify-center shadow-md">
-            <p className="">Copyright © 2025 - UniMilk</p>
-          </footer>
-        </ThemeProvider>
-      </body>
+            {/* footer */}
+            <footer className="h-12 flex items-center justify-center shadow-md">
+              <p className="">Copyright © 2025 - UniMilk</p>
+            </footer>
+          </ThemeProvider>
+        </body>
+      </UserProvider>
     </html>
   )
 }
