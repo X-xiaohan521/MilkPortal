@@ -1,6 +1,12 @@
 const BASE_URL = "http://localhost:8080";
 
-export async function apiFetch(url: string, options: RequestInit = {}) {
+export type UniResponse = {
+  "code": number,
+  "message": string,
+  "data": never
+}
+
+export async function apiFetch(url: string, options: RequestInit = {}): Promise<UniResponse> {
   const token = localStorage.getItem("token");
 
   const headers: Record<string, string> = {

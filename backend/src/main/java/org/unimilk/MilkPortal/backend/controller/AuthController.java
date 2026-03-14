@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.unimilk.MilkPortal.backend.dto.LoginRequest;
 import org.unimilk.MilkPortal.backend.dto.LoginResponse;
 import org.unimilk.MilkPortal.backend.dto.RegisterResponse;
+import org.unimilk.MilkPortal.backend.exception.BusinessException;
+import org.unimilk.MilkPortal.backend.response.UniResponse;
 import org.unimilk.MilkPortal.backend.service.AuthService;
 
 @Slf4j
@@ -21,23 +23,23 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest req) {
+    public UniResponse login(@RequestBody LoginRequest req) {
         if (req.username() == null || req.username().isBlank()) {
             log.warn("User login attempt failed: username empty.");
-            return new LoginResponse(false, "", "Username can't be empty.");
+            throw new BusinessException("Username can't be empty.");
         }
 
         if (req.password() == null || req.password().isBlank()) {
             log.warn("User {} login failed: password empty.", req.username());
-            return new LoginResponse(false, "", "Password can't be empty.");
+            throw new BusinessException("Password can't be empty.");
         }
-
-        return authService.onLogin(req.username(), req.password());
+        LoginResponse loginResponse = authService.onLogin(req.username(), req.password());
+        return UniResponse.success(loginResponse.message(), loginResponse.token());
     }
 
 
     @PostMapping("/register")
-    public RegisterResponse register() {
-        return new RegisterResponse(0L, "DefaultUser");
+    public UniResponse register() {
+        return UniResponse.error("Register not allowed.");
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.unimilk.MilkPortal.backend.entity.User;
 import org.unimilk.MilkPortal.backend.repo.UserRepo;
 
@@ -38,7 +39,7 @@ public class UserService {
         }
     }
 
-    public void setAvatar() {
+    public void setAvatar(Long userId, MultipartFile file) {
 
     }
 }

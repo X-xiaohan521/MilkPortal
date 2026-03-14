@@ -17,6 +17,7 @@ import { Search } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getUrl } from '@/lib/api'
+import { useRouter } from "next/navigation"
 
 export function Navbar() {
   return (
@@ -108,6 +109,16 @@ export function Navbar() {
 
 export function TopBar() {
   const { user, loading } = useUser()
+    const router = useRouter()
+
+  const onClickAvatar = () => {
+    if (!localStorage.getItem("token")) {
+      router.push("/login")
+    } else {
+      router.push("/account/profile")
+    }
+  }
+
   return (
     <div className="h-14">
       <div className="container mx-auto flex h-full items-center justify-between">
@@ -132,16 +143,14 @@ export function TopBar() {
           </InputGroup>
           <ThemeToggle />
           {/* Avatar (placeholder) */}
-          <Link href={"/login"}>
-            <Avatar>
-              <AvatarImage src={
-                user
-                  ? getUrl(user.avatarUri)
-                  : ""
-              } className="rounded-full" />
-              <AvatarFallback>ML</AvatarFallback>
-            </Avatar>
-          </Link>
+          <Avatar onClick={onClickAvatar} className="cursor-pointer">
+            <AvatarImage src={
+              user
+                ? getUrl(user.avatarUri)
+                : ""
+            } className="rounded-full" />
+            <AvatarFallback>ML</AvatarFallback>
+          </Avatar>
         </div>
       </div>
     </div>

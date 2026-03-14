@@ -9,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.unimilk.MilkPortal.backend.dto.LoginResponse;
 import org.unimilk.MilkPortal.backend.entity.User;
+import org.unimilk.MilkPortal.backend.exception.BusinessException;
 import org.unimilk.MilkPortal.backend.repo.UserRepo;
 import org.unimilk.MilkPortal.backend.util.JwtUtils;
 
@@ -32,10 +33,10 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             log.info("User {} login success.", username);
-            return new LoginResponse(true, jwtUtils.generateToken(authentication.getName()), "Login success.");
+            return new LoginResponse(jwtUtils.generateToken(authentication.getName()), "Login success.");
         } catch (AuthenticationException e) {
             log.warn("User {} login failed: invalid username or password.", username);
-            return new LoginResponse(false, "", "Invalid username or password.");
+            throw new BusinessException("Invalid username or password.", e);
         }
     }
 

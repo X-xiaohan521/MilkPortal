@@ -408,7 +408,7 @@ export function AdminSidebar({
                     <SidebarMenuItem className="rounded-md hover:bg-accent transition-transform">
                         <SidebarMenuButton
                             asChild
-                            className="data-[slot=sidebar-menu-button]:!p-1.5"
+                            className="data-[slot=sidebar-menu-button]:p-1.5!"
                         >
                             <Link href="/">
                                 {/*<IconInnerShadowTop className="!size-5" />*/}

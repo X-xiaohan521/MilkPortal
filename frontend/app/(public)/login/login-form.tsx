@@ -15,14 +15,9 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation"
+import { UniResponse } from "@/lib/api";
 
-type LoginResponse = {
-  success: boolean,
-  token: string,
-  message: string
-}
-
-export function LoginForm({
+function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -87,11 +82,11 @@ export function LoginForm({
           password: password
         })
       })
-      const data: LoginResponse = await res.json()
+      const data: UniResponse = await res.json()
       if (!res.ok) {
         setError("Server error")
-      } else if (data.success) {
-        localStorage.setItem("token", data.token)  // store token in localStorage
+      } else if (data.code === 1) {
+        localStorage.setItem("token", data.data as string)  // store token in localStorage
         router.push("/")
       } else {
         setError(data.message);
@@ -203,3 +198,5 @@ export function LoginForm({
     </div>
   )
 }
+
+export default LoginForm

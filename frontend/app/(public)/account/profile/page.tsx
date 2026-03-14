@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -21,54 +23,65 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { PasswordRequirements } from "./password-requirements"
 import { AvatarCropper } from "./avatar-cropper"
-
-interface profile {
-    username: string
-    avatar: string
-}
+import { useUser } from "@/context/user-context"
+import { getUrl } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 export default function ProfileField() {
+    const { user, loading } = useUser()
+    const router = useRouter();
+    if (!user) {router.push("/")}
     return (
         <div className="w-full p-6 grid grid-cols-2">
-            <form>
+            <div>
                 <FieldGroup>
-                    <FieldSet>
-                        <FieldLegend>Your Profile</FieldLegend>
-                        <FieldDescription>
-                            All your sensitive information are secure and encrypted
-                        </FieldDescription>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="new_username">
-                                    Username
-                                </FieldLabel>
-                                <Input
-                                    id="new_username"
-                                    placeholder={data.user.username}
-                                    required
-                                
-                                />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                                    Password
-                                </FieldLabel>
-                                <Input
-                                    id="checkout-7j9-card-number-uw1"
-                                    type="password"
-                                    placeholder=""
-                                    required
-                                />
-                                <FieldDescription>
-                                    <PasswordRequirements
-                                        lengthOk={true}
-                                        charsetOk={false}
-                                        mixOk={false}
+                    <form>
+                        <FieldSet>
+                            <FieldLegend>Your Profile</FieldLegend>
+                            <FieldDescription>
+                                All your sensitive information are secure and encrypted
+                            </FieldDescription>
+                            <FieldGroup>
+                                <Field>
+                                    <FieldLabel htmlFor="new_username">
+                                        Username
+                                    </FieldLabel>
+                                    <Input
+                                        id="new_username"
+                                        placeholder={user?.username}
+                                        required
+
                                     />
-                                </FieldDescription>
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                                        Password
+                                    </FieldLabel>
+                                    <Input
+                                        id="checkout-7j9-card-number-uw1"
+                                        type="password"
+                                        placeholder=""
+                                        required
+                                    />
+                                    <FieldDescription>
+                                        <PasswordRequirements
+                                            lengthOk={true}
+                                            charsetOk={false}
+                                            mixOk={false}
+                                        />
+                                    </FieldDescription>
+                                </Field>
+                            </FieldGroup>
+
+                            <Field orientation="horizontal">
+                                <Button type="submit">Submit</Button>
+                                <Button variant="outline" type="button">
+                                    Cancel
+                                </Button>
                             </Field>
-                        </FieldGroup>
-                    </FieldSet>
+
+                        </FieldSet>
+                    </form>
                     <FieldSeparator />
                     <FieldSet>
                         <FieldLegend>Two Factor Authentication</FieldLegend>
@@ -104,19 +117,14 @@ export default function ProfileField() {
                             </Field>
                         </FieldGroup>
                     </FieldSet>
-                    <Field orientation="horizontal">
-                        <Button type="submit">Submit</Button>
-                        <Button variant="outline" type="button">
-                            Cancel
-                        </Button>
-                    </Field>
                 </FieldGroup>
-            </form>
+            </div>
+
             <div className="px-6">
                 <FieldGroup>
                     <FieldSet>
                         <FieldLegend>Avatar</FieldLegend>
-                        <AvatarCropper src={""} />
+                        {/*<AvatarCropper src={getUrl(user?.avatarUri)} />*/}
                     </FieldSet>
                 </FieldGroup>
             </div>
