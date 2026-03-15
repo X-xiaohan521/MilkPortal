@@ -22,17 +22,12 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupLabel,
-    SidebarHeader,
     SidebarMenu,
-    SidebarMenuAction,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-    SidebarProvider,
-    SidebarRail,
-    SidebarTrigger,
     useSidebar,
 } from "@/components/ui/sidebar"
 import {
@@ -47,27 +42,21 @@ import {
     Computer,
     Container,
     CreditCard,
-    Folder,
-    Forward,
     GalleryVerticalEnd,
     LogOut,
-    MoreHorizontal, Network,
+    Network,
     Pickaxe,
-    PieChart,
     Settings2,
     Sparkles,
     SquareUserRound,
-    Trash2,
+
 } from "lucide-react"
-import Link from "next/link";
+import {useUser, User} from "@/context/user-context";
+import { useRouter } from "next/navigation"
+import { getUrl } from "@/lib/api"
 
 // This is sample data.
 const data = {
-    user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
-    },
     teams: [
         {
             name: "Acme Inc",
@@ -281,16 +270,17 @@ function NavServer({
     )
 }
 
-function NavUser({
-                     user,
-                 }: {
-    user: {
-        name: string
-        email: string
-        avatar: string
-    }
-}) {
+function NavUser({user}: {user: User | null}) {
     const { isMobile } = useSidebar()
+
+    const { refreshUser } = useUser()
+    const router = useRouter()
+
+    const handleLogOut = async () => {
+        localStorage.removeItem("token")
+        await refreshUser()
+        router.push("/")
+    }
 
     return (
         <SidebarMenu>
@@ -302,12 +292,12 @@ function NavUser({
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={user.avatar} alt={user.name} />
-                                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                <AvatarImage src={user ? getUrl(user.avatarUri) : ""} alt={user?.username} />
+                                <AvatarFallback className="rounded-lg">{ user?.username.substring(0, 2).toUpperCase() }</AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{user.name}</span>
-                                <span className="truncate text-xs">{user.email}</span>
+                                <span className="truncate font-medium">{user?.username}</span>
+                                <span className="truncate text-xs">me@example.com</span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
@@ -322,12 +312,12 @@ function NavUser({
                             <DropdownMenuLabel className="p-0 font-normal">
                                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                     <Avatar className="h-8 w-8 rounded-lg">
-                                        <AvatarImage src={user.avatar} alt={user.name} />
-                                        <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                        <AvatarImage src={user ? getUrl(user.avatarUri) : ""} alt={user?.username} />
+                                        <AvatarFallback className="rounded-lg">{ user?.username.substring(0, 2).toUpperCase() }</AvatarFallback>
                                     </Avatar>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
-                                        <span className="truncate font-medium">{user.name}</span>
-                                        <span className="truncate text-xs">{user.email}</span>
+                                        <span className="truncate font-medium">{user?.username}</span>
+                                        <span className="truncate text-xs">me@example.com</span>
                                     </div>
                                 </div>
                             </DropdownMenuLabel>
@@ -356,7 +346,7 @@ function NavUser({
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleLogOut}>
                                 <LogOut />
                                 Log out
                             </DropdownMenuItem>
@@ -371,6 +361,8 @@ function NavUser({
 export function ProfileSidebar({
                                ...props
                            }: React.ComponentProps<typeof Sidebar>) {
+    const { user, loading } = useUser()
+
     return (
         <Sidebar variant="floating" collapsible="icon" {...props}>
             <SidebarContent>
@@ -378,7 +370,7 @@ export function ProfileSidebar({
                 <NavMain items={data.navMain} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser user={user} />
             </SidebarFooter>
         </Sidebar>
     )

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.unimilk.MilkPortal.backend.dto.MeResponse;
+import org.unimilk.MilkPortal.backend.response.UniResponse;
 import org.unimilk.MilkPortal.backend.service.UserService;
 
 @Slf4j
@@ -23,10 +24,10 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public MeResponse me(HttpServletRequest req) {
+    public UniResponse me(HttpServletRequest req) {
         String username = (String) req.getAttribute("username");
         String avatarUri = userService.getAvatarUri(username);
-        return new MeResponse(username, avatarUri);
+        return UniResponse.success(new MeResponse(username, avatarUri));
     }
 
     @GetMapping("/avatar")

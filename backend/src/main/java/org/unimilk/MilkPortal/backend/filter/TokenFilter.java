@@ -37,12 +37,6 @@ public class TokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
-            log.info("HTTP pre-check: allowed pass.");
-            filterChain.doFilter(req, resp);
-            return;
-        }
-
         String requestURI = req.getRequestURI();
 
         if (isPublicPath(requestURI)) {

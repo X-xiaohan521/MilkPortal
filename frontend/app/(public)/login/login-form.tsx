@@ -16,6 +16,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { UniResponse } from "@/lib/api";
+import { useUser } from "@/context/user-context"
 
 function LoginForm({
   className,
@@ -29,6 +30,8 @@ function LoginForm({
   const [logging, setLogging] = useState(false);
 
   const router = useRouter()
+
+  const { refreshUser } = useUser()
 
   const validateUsername = (): boolean => {
     setUsernameMessage("");
@@ -82,14 +85,16 @@ function LoginForm({
           password: password
         })
       })
-      const data: UniResponse = await res.json()
+      const response: UniResponse = await res.json()
+      console.log("Got response from backend: ", response)
       if (!res.ok) {
         setError("Server error")
-      } else if (data.code === 1) {
-        localStorage.setItem("token", data.data as string)  // store token in localStorage
+      } else if (response.code === 1) {
+        localStorage.setItem("token", response.data as unknown as string)  // store token in localStorage
         router.push("/")
+        await refreshUser()
       } else {
-        setError(data.message);
+        setError(response.msg);
       }
     } catch(err) {
       setError("Network Error: " + err);

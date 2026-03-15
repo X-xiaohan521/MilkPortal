@@ -12,25 +12,18 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { PasswordRequirements } from "./password-requirements"
-import { AvatarCropper } from "./avatar-cropper"
 import { useUser } from "@/context/user-context"
 import { getUrl } from "@/lib/api"
 import { useRouter } from "next/navigation"
+import {useEffect} from "react";
+import { AvatarCropper } from "./avatar-cropper"
 
 export default function ProfileField() {
     const { user, loading } = useUser()
     const router = useRouter();
-    if (!user) {router.push("/")}
+    
     return (
         <div className="w-full p-6 grid grid-cols-2">
             <div>
@@ -124,7 +117,7 @@ export default function ProfileField() {
                 <FieldGroup>
                     <FieldSet>
                         <FieldLegend>Avatar</FieldLegend>
-                        {/*<AvatarCropper src={getUrl(user?.avatarUri)} />*/}
+                        <AvatarCropper src={user ? getUrl(user.avatarUri) : ""} />
                     </FieldSet>
                 </FieldGroup>
             </div>

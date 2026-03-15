@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.unimilk.MilkPortal.backend.dto.LoginRequest;
 import org.unimilk.MilkPortal.backend.dto.LoginResponse;
-import org.unimilk.MilkPortal.backend.dto.RegisterResponse;
 import org.unimilk.MilkPortal.backend.exception.BusinessException;
 import org.unimilk.MilkPortal.backend.response.UniResponse;
 import org.unimilk.MilkPortal.backend.service.AuthService;

@@ -75,22 +75,6 @@ GET /auth/logout
 
 清除认证 cookie 并登出。
 
-### 更新凭据
-
-```
-POST /auth/update
-```
-
-更新用户名和/或密码。
-
-**请求体：**
-```json
-{
-  "username": "string",
-  "password": "string"
-}
-```
-
 ---
 
 ## Passkey / WebAuthn <Badge type="tip" text="v3.2+" />

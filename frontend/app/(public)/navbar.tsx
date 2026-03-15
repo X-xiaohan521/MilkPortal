@@ -109,7 +109,7 @@ export function Navbar() {
 
 export function TopBar() {
   const { user, loading } = useUser()
-    const router = useRouter()
+  const router = useRouter()
 
   const onClickAvatar = () => {
     if (!localStorage.getItem("token")) {
@@ -142,14 +142,14 @@ export function TopBar() {
             <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
           </InputGroup>
           <ThemeToggle />
-          {/* Avatar (placeholder) */}
+          {/* Avatar */}
           <Avatar onClick={onClickAvatar} className="cursor-pointer">
             <AvatarImage src={
               user
-                ? getUrl(user.avatarUri)
+                ? `${getUrl(user.avatarUri)}?t=${Date.now()}`
                 : ""
             } className="rounded-full" />
-            <AvatarFallback>ML</AvatarFallback>
+            <AvatarFallback>{ user? user.username.substring(0, 2).toUpperCase() : "ML" }</AvatarFallback>
           </Avatar>
         </div>
       </div>
